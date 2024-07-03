@@ -70,6 +70,8 @@
 
     <script>
         document.addEventListener('DOMContentLoaded', function() {
+            console.log('DOM chargé');
+
             FedaPay.init({
                 public_key: 'pk_live_TfSz212W0xSMKK7oPEogkFmp',
                 transaction: {
@@ -77,21 +79,30 @@
                     description: 'Achat sur notre site'
                 },
                 onComplete: function(response) {
+                    console.log('Paiement complété', response);
                     if (response.reason === FedaPay.CHECKOUT_COMPLETED) {
+                        console.log('Paiement réussi');
                         showConfirmation();
+                    } else {
+                        console.log('Paiement non complété');
                     }
                 }
             });
 
             let payBtn = document.getElementById('pay-btn');
+            let modal = document.getElementById('confirmation-modal');
+
             payBtn.addEventListener('click', function() {
+                console.log('Bouton cliqué');
+                showConfirmation(); // Afficher la fenêtre immédiatement après le clic
                 FedaPay.open();
             });
 
             function showConfirmation() {
-                let modal = document.getElementById('confirmation-modal');
+                console.log('Affichage de la confirmation');
                 modal.style.display = 'block';
                 setTimeout(function() {
+                    console.log('Fermeture de la confirmation');
                     modal.style.display = 'none';
                 }, 3000);
             }
