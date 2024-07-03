@@ -3,568 +3,99 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>QCM Interactif sur la Géopolitique Béninoise</title>
+    <title>Page de paiement</title>
+    <script src="https://cdn.fedapay.com/checkout.js?v=1.1.7"></script>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #E6F3FF;
             display: flex;
             justify-content: center;
             align-items: center;
             height: 100vh;
             margin: 0;
+            background-color: #f0f0f0;
         }
-        .container {
-            background-color: #FFFFFF;
-            border-radius: 10px;
-            padding: 20px;
-            box-shadow: 0 0 10px rgba(0,0,0,0.1);
-            width: 800px;
-        }
-        .header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            margin-bottom: 20px;
-        }
-        .timer {
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            border: 5px solid #4A90E2;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            font-size: 24px;
-            font-weight: bold;
-        }
-        .score-container {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .username {
-            font-weight: bold;
-        }
-        .score {
-            background-color: #4A90E2;
-            padding: 5px 15px;
-            border-radius: 5px;
-            font-weight: bold;
-            color: white;
-        }
-        .question {
-            text-align: center;
-            margin-bottom: 20px;
-        }
-        .question-icon {
-            font-size: 72px;
-            display: inline-block;
-            width: 100px;
-            height: 100px;
-            line-height: 100px;
-            border-radius: 50%;
-            transition: all 0.5s ease-in-out;
-        }
-        .question-icon.default {
-            background: conic-gradient(#4A90E2, #82C0FF, #2E5C8A, #1C3D5A);
-            -webkit-background-clip: text;
-            color: transparent;
-        }
-        .question-icon.correct {
+        #pay-btn {
+            padding: 10px 20px;
+            font-size: 18px;
+            cursor: pointer;
             background-color: #4CAF50;
             color: white;
-        }
-        .question-icon.incorrect {
-            background-color: #F44336;
-            color: white;
-        }
-        .options {
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-        }
-        .option {
-            padding: 10px;
-            border-radius: 5px;
-            cursor: pointer;
-            transition: all 0.3s ease;
-        }
-        .option:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
-        }
-        .blue { background-color: #82C0FF; }
-        .orange { background-color: #FFA500; }
-        .green { background-color: #90EE90; }
-        .purple { background-color: #DDA0DD; }
-        .selected {
-            border: 2px solid #000;
-        }
-        #hint-btn, #replay, #start-quiz {
-            background-color: #4A90E2;
-            color: white;
             border: none;
-            padding: 10px 20px;
             border-radius: 5px;
-            cursor: pointer;
-            font-size: 16px;
-            margin-top: 20px;
-            transition: all 0.3s ease;
         }
-        #hint-btn:hover, #replay:hover, #start-quiz:hover {
-            background-color: #2E5C8A;
+        #confirmation-modal {
+            display: none;
+            position: fixed;
+            z-index: 1;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.5);
         }
-        #hint {
-            margin-top: 20px;
-            font-style: italic;
-            color: #495057;
-        }
-        #result {
-            margin-top: 20px;
-            font-weight: bold;
+        .modal-content {
+            background-color: white;
+            margin: 15% auto;
+            padding: 20px;
+            border-radius: 5px;
+            width: 300px;
             text-align: center;
         }
-        #top-scores {
-            margin-top: 20px;
-            text-align: center;
+        .spinner {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #3498db;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 1s linear infinite;
+            margin: 20px auto;
         }
-        #registration {
-            text-align: center;
-        }
-        #username-input {
-            padding: 10px;
-            font-size: 16px;
-            margin-right: 10px;
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div id="registration">
-            <h2>Inscription au Quiz sur la Géopolitique Béninoise</h2>
-            <input type="text" id="username-input" placeholder="Entrez votre nom">
-            <button id="start-quiz">Commencer le Quiz</button>
-        </div>
-        <div id="quiz-content" style="display: none;">
-            <div class="header">
-                <div class="timer" id="timer">30</div>
-                <div class="score-container">
-                    <span class="username" id="username-display"></span>
-                    <div class="score">Score: <span id="score">0</span> / <span id="total-questions">30</span></div>
-                </div>
-            </div>
-            <div class="question">
-                <div class="question-icon default" id="question-icon">?</div>
-                <p id="question-text"></p>
-            </div>
-            <div class="options" id="options"></div>
-            <button id="hint-btn">Afficher l'indice</button>
-            <div id="hint"></div>
-            <button id="replay" style="display: none;">Rejouer</button>
-            <div id="result"></div>
-            <div id="top-scores"></div>
+    <button id="pay-btn">Payer 1000 FCFA</button>
+
+    <div id="confirmation-modal">
+        <div class="modal-content">
+            <h2>Traitement du paiement</h2>
+            <div class="spinner"></div>
+            <p>Veuillez patienter...</p>
         </div>
     </div>
 
-    <script type="module">
-        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
-        import { getFirestore, collection, addDoc, query, orderBy, limit, getDocs } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js";
-        import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-analytics.js";
-
-        const firebaseConfig = {
-            apiKey: "AIzaSyD_amebtoXc2_Pa1EmyGqMBWOQpGF9OPP4",
-            authDomain: "eduque-moi-374cb.firebaseapp.com",
-            projectId: "eduque-moi-374cb",
-            storageBucket: "eduque-moi-374cb.appspot.com",
-            messagingSenderId: "655509489959",
-            appId: "1:655509489959:web:a1d1441306a3f331b3c102",
-            measurementId: "G-30JGF7TM85"
-        };
-
-        const app = initializeApp(firebaseConfig);
-        const db = getFirestore(app);
-        const analytics = getAnalytics(app);
-
-        const quizData = [
-            {
-                question: "Quelle est la capitale du Bénin ?",
-                options: ["Porto-Novo", "Cotonou", "Parakou", "Abomey"],
-                correct: 0,
-                hint: "C'est la capitale officielle, bien que Cotonou soit la plus grande ville."
-            },
-            {
-                question: "En quelle année le Bénin a-t-il obtenu son indépendance de la France ?",
-                options: ["1958", "1960", "1962", "1964"],
-                correct: 1,
-                hint: "C'était la même année que de nombreux autres pays d'Afrique de l'Ouest."
-            },
-            {
-                question: "Quel est le nom du président actuel du Bénin ?",
-                options: ["Thomas Boni Yayi", "Patrice Talon", "Mathieu Kérékou", "Nicéphore Soglo"],
-                correct: 1,
-                hint: "Il est en fonction depuis 2016 et est connu comme 'le roi du coton'."
-            },
-            {
-                question: "Quel fleuve forme une partie de la frontière nord du Bénin ?",
-                options: ["Niger", "Volta", "Ouémé", "Mono"],
-                correct: 0,
-                hint: "C'est le troisième plus long fleuve d'Afrique."
-            },
-            {
-                question: "Quel est le principal port du Bénin ?",
-                options: ["Porto-Novo", "Cotonou", "Ouidah", "Parakou"],
-                correct: 1,
-                hint: "C'est aussi la plus grande ville du pays."
-            },
-            {
-                question: "Quelle est la langue officielle du Bénin ?",
-                options: ["Fon", "Yoruba", "Français", "Bariba"],
-                correct: 2,
-                hint: "C'est un héritage de la période coloniale."
-            },
-            {
-                question: "Quel pays ne partage pas de frontière avec le Bénin ?",
-                options: ["Nigeria", "Togo", "Burkina Faso", "Ghana"],
-                correct: 3,
-                hint: "Ce pays est situé plus à l'ouest."
-            },
-            {
-                question: "Quel est le principal produit d'exportation du Bénin ?",
-                options: ["Cacao", "Coton", "Café", "Caoutchouc"],
-                correct: 1,
-                hint: "Le pays est surnommé 'le pays blanc de l'or blanc'."
-            },
-            {
-                question: "Quel ancien royaume africain était situé dans l'actuel Bénin ?",
-                options: ["Royaume du Congo", "Empire du Mali", "Royaume du Dahomey", "Empire Songhaï"],
-                correct: 2,
-                hint: "Ce royaume a résisté à la colonisation française jusqu'en 1894."
-            },
-            {
-                question: "Quelle religion est la plus pratiquée au Bénin ?",
-                options: ["Islam", "Christianisme", "Vodun", "Bouddhisme"],
-                correct: 1,
-                hint: "Environ 50% de la population pratique cette religion."
-            },
-            {
-                question: "Quel est le nom du système politique actuel du Bénin ?",
-                options: ["Monarchie constitutionnelle", "République présidentielle", "République parlementaire", "État fédéral"],
-                correct: 1,
-                hint: "Le président est à la fois chef d'État et chef du gouvernement."
-            },
-            {
-                question: "Quelle est la superficie approximative du Bénin ?",
-                options: ["114 763 km²", "123 456 km²", "98 765 km²", "135 789 km²"],
-                correct: 0,
-                hint: "C'est un peu plus grand que la Bulgarie."
-            },
-            {
-                question: "Quel parc national du Bénin est connu pour ses éléphants ?",
-                options: ["Parc W", "Pendjari", "Mont Kouffé", "Dja"],
-                correct: 1,
-                hint: "Il fait partie du complexe WAP (W-Arly-Pendjari)."
-            },
-            {
-                question: "Quelle est la monnaie du Bénin ?",
-                options: ["Franc CFA", "Naira", "Cedi", "Franc béninois"],
-                correct: 0,
-                hint: "C'est la monnaie commune à plusieurs pays d'Afrique de l'Ouest."
-            },
-            {
-                question: "Quel pourcentage approximatif de la population béninoise vit de l'agriculture ?",
-                options: ["30%", "50%", "70%", "90%"],
-                correct: 2,
-                hint: "L'agriculture est le principal secteur économique du pays."
-            },
-            {
-                question: "Quel est le taux d'alphabétisation approximatif au Bénin ?",
-                options: ["40%", "50%", "60%", "70%"],
-                correct: 1,
-                hint: "Il a considérablement augmenté ces dernières années, mais reste inférieur à la moyenne mondiale."
-            },
-            {
-                question: "Quelle ville béninoise est connue comme la 'Venise de l'Afrique' ?",
-                options: ["Ganvié", "Abomey", "Ouidah", "Natitingou"],
-                correct: 0,
-                hint: "Cette ville est construite sur pilotis sur le lac Nokoué."
-            },
-            {
-                question: "Quel est le principal défi environnemental du Bénin ?",
-                options: ["Désertification", "Déforestation", "Pollution de l'air", "Érosion côtière"],
-                correct: 1,
-                hint: "Ce problème est lié à l'expansion agricole et à la demande de bois de chauffage."
-            },
-            {
-                question: "Quel est le nom de l'aéroport international principal du Bénin ?",
-                options: ["Aéroport de Cadjehoun", "Aéroport de Porto-Novo", "Aéroport de Parakou", "Aéroport de Natitingou"],
-                correct: 0,
-                hint: "Il est situé à Cotonou."
-            },
-            {
-                question: "Quel pays a colonisé le Bénin avant son indépendance ?",
-                options: ["Royaume-Uni", "France", "Portugal", "Allemagne"],
-                correct: 1,
-                hint: "Le pays était connu sous le nom de Dahomey pendant la période coloniale."
-            },
-            {
-                question: "Quel est le principal lac du Bénin ?",
-                options: ["Lac Nokoué", "Lac Ahémé", "Lac Volta", "Lac Tchad"],
-                correct: 0,
-                hint: "C'est le plus grand lac du pays, situé près de Cotonou."
-            },
-            {
-                question: "Quelle est la principale ethnie du Bénin ?",
-                options: ["Yoruba", "Fon", "Bariba", "Somba"],
-                correct: 1,
-                hint: "Ce groupe ethnique représente environ 40% de la population."
-            },
-            {
-                question: "Quel est le nom du plus haut sommet du Bénin ?",
-                options: ["Mont Sokbaro", "Mont Atacora", "Mont Kouffé", "Mont Aledjo"],
-                correct: 0,
-                hint: "Il culmine à 658 mètres d'altitude."
-            },
-            {
-                question: "Quelle est la principale source d'énergie électrique au Bénin ?",
-                options: ["Hydroélectricité", "Énergie solaire", "Gaz naturel", "Charbon"],
-                correct: 0,
-                hint: "Le barrage de Nangbeto sur le fleuve Mono est une source importante."
-            },
-            {
-                question: "Quel accord économique régional inclut le Bénin ?",
-                options: ["CEDEAO", "CEMAC", "COMESA", "SADC"],
-                correct: 0,
-                hint: "C'est une organisation d'Afrique de l'Ouest."
-            },
-            {
-                question: "Quel pourcentage approximatif de la population béninoise vit sous le seuil de pauvreté ?",
-                options: ["20%", "40%", "60%", "80%"],
-                correct: 1,
-                hint: "Malgré les progrès économiques, la pauvreté reste un défi majeur."
-            },
-            {
-                question: "Quel est le taux de croissance démographique annuel approximatif du Bénin ?",
-                options: ["1%", "2%", "3%", "4%"],
-                correct: 2,
-                hint: "C'est l'un des taux les plus élevés d'Afrique."
-            },
-            {
-                question: "Quelle est la durée du mandat présidentiel au Bénin ?",
-                options: ["4 ans", "5 ans", "6 ans", "7 ans"],
-                correct: 1,
-                hint: "C'est la même durée que dans de nombreux autres pays."
-            },
-            {
-                question: "Quel est le principal partenaire commercial du Bénin ?",
-                options: ["France", "Chine", "Nigeria", "États-Unis"],
-                correct: 2,
-                hint: "C'est le grand voisin à l'est du Bénin."
-            },
-            {
-                question: "Quelle est la date de la fête nationale du Bénin ?",
-                options: ["1er janvier", "1er mai", "1er août", "1er novembre"],
-                correct: 2,
-                hint: "C'est la date de l'indépendance du pays."
-            }
-        ];
-
-        const questionText = document.getElementById('question-text');
-        const optionsContainer = document.getElementById('options');
-        const timerDisplay = document.getElementById('timer');
-        const scoreDisplay = document.getElementById('score');
-        const totalQuestionsDisplay = document.getElementById('total-questions');
-        const hintButton = document.getElementById('hint-btn');
-        const hintContainer = document.getElementById('hint');
-        const replayButton = document.getElementById('replay');
-        const resultContainer = document.getElementById('result');
-        const questionIcon = document.getElementById('question-icon');
-        const registrationDiv = document.getElementById('registration');
-        const quizContentDiv = document.getElementById('quiz-content');
-        const usernameInput = document.getElementById('username-input');
-        const startQuizButton = document.getElementById('start-quiz');
-        const usernameDisplay = document.getElementById('username-display');
-
-        let currentQuestion = 0;
-        let score = 0;
-        let timer;
-        let timeLeft = 30;
-        let username = '';
-
-        startQuizButton.addEventListener('click', () => {
-            username = usernameInput.value.trim();
-            if (username) {
-                registrationDiv.style.display = 'none';
-                quizContentDiv.style.display = 'block';
-                usernameDisplay.textContent = username;
-                resetQuiz();
-            } else {
-                alert("Veuillez entrer un nom d'utilisateur pour commencer le quiz.");
-            }
-        });
-
-        function startTimer() {
-            timeLeft = 30;
-            timerDisplay.textContent = timeLeft;
-            timer = setInterval(() => {
-                timeLeft--;
-                timerDisplay.textContent = timeLeft;
-                if (timeLeft <= 0) {
-                    clearInterval(timer);
-                    showNextQuestion();
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            FedaPay.init({
+                public_key: 'pk_live_TfSz212W0xSMKK7oPEogkFmp',
+                transaction: {
+                    amount: 1000,
+                    description: 'Achat sur notre site'
+                },
+                onComplete: function(response) {
+                    if (response.reason === FedaPay.CHECKOUT_COMPLETED) {
+                        showConfirmation();
+                    }
                 }
-            }, 1000);
-        }
-
-        function shuffleArray(array) {
-            for (let i = array.length - 1; i > 0; i--) {
-                const j = Math.floor(Math.random() * (i + 1));
-                [array[i], array[j]] = [array[j], array[i]];
-            }
-        }
-
-        function showQuestion(questionIndex) {
-            if (questionIndex >= quizData.length) {
-                showFinalResult();
-                return;
-            }
-
-            const questionData = quizData[questionIndex];
-            questionText.textContent = questionData.question;
-            optionsContainer.innerHTML = '';
-
-            const shuffledOptions = [...questionData.options];
-            shuffleArray(shuffledOptions);
-
-            const colors = ['blue', 'orange', 'green', 'purple'];
-            shuffledOptions.forEach((option, index) => {
-                const optionDiv = document.createElement('div');
-                optionDiv.classList.add('option', colors[index]);
-                optionDiv.textContent = option;
-                optionDiv.addEventListener('click', () => selectOption(optionDiv, shuffledOptions.indexOf(questionData.options[questionData.correct])));
-                optionsContainer.appendChild(optionDiv);
             });
 
-            hintContainer.textContent = '';
-            questionIcon.className = 'question-icon default';
-            questionIcon.textContent = '?';
-            startTimer();
-        }
+            let payBtn = document.getElementById('pay-btn');
+            payBtn.addEventListener('click', function() {
+                FedaPay.open();
+            });
 
-        function selectOption(optionDiv, correctIndex) {
-            clearInterval(timer);
-            const options = document.querySelectorAll('.option');
-            options.forEach(option => option.classList.remove('selected'));
-            optionDiv.classList.add('selected');
-            
-            if (Array.from(optionDiv.parentNode.children).indexOf(optionDiv) === correctIndex) {
-                questionIcon.textContent = '✓';
-                questionIcon.className = 'question-icon correct pulse';
-                resultContainer.textContent = "Correct !";
-                resultContainer.style.color = "green";
-                score++;
-                updateScore();
-            } else {
-                questionIcon.textContent = '✗';
-                questionIcon.className = 'question-icon incorrect shake';
-                resultContainer.textContent = "Incorrect. La bonne réponse était : " + 
-                    quizData[currentQuestion].options[quizData[currentQuestion].correct];
-                resultContainer.style.color = "red";
+            function showConfirmation() {
+                let modal = document.getElementById('confirmation-modal');
+                modal.style.display = 'block';
+                setTimeout(function() {
+                    modal.style.display = 'none';
+                }, 3000);
             }
-            
-            setTimeout(showNextQuestion, 1500);
-        }
-
-        function updateScore() {
-            scoreDisplay.textContent = score;
-        }
-
-        function showNextQuestion() {
-            currentQuestion++;
-            if (currentQuestion < quizData.length) {
-                showQuestion(currentQuestion);
-                resultContainer.textContent = '';
-            } else {
-                showFinalResult();
-            }
-        }
-
-        async function showFinalResult() {
-            questionText.textContent = '';
-            optionsContainer.innerHTML = '';
-            hintButton.style.display = 'none';
-            replayButton.style.display = 'inline-block';
-            timerDisplay.textContent = '';
-            questionIcon.style.display = 'none';
-            
-            let message = '';
-            if (score === quizData.length) {
-                message = "Félicitations ! Vous êtes un expert de la géopolitique béninoise !";
-            } else if (score >= quizData.length * 0.7) {
-                message = "Très bien ! Vous avez une bonne connaissance de la géopolitique béninoise.";
-            } else if (score >= quizData.length * 0.5) {
-                message = "Pas mal ! Vous avez une connaissance de base de la géopolitique béninoise.";
-            } else {
-                message = "Vous pouvez améliorer votre connaissance de la géopolitique béninoise. Continuez à apprendre !";
-            }
-
-            resultContainer.textContent = `Votre score final est de ${score}/${quizData.length}. ${message}`;
-
-            await saveScore(username, score);
-            await showTopScores();
-        }
-
-        function showHint() {
-            hintContainer.textContent = quizData[currentQuestion].hint;
-        }
-
-        function resetQuiz() {
-            currentQuestion = 0;
-            score = 0;
-            updateScore();
-            shuffleArray(quizData);
-            showQuestion(currentQuestion);
-            replayButton.style.display = 'none';
-            hintButton.style.display = 'inline-block';
-            resultContainer.textContent = '';
-            questionIcon.style.display = 'inline-block';
-            timerDisplay.style.display = 'block';
-            document.getElementById('top-scores').innerHTML = '';
-        }
-
-        async function saveScore(username, score) {
-            try {
-                await addDoc(collection(db, "benin_geopolitics_scores"), {
-                    username: username,
-                    score: score,
-                    date: new Date()
-                });
-                console.log("Score sauvegardé avec succès");
-            } catch (error) {
-                console.error("Erreur lors de la sauvegarde du score: ", error);
-            }
-        }
-
-        async function showTopScores() {
-            try {
-                const q = query(collection(db, "benin_geopolitics_scores"), orderBy("score", "desc"), limit(10));
-                const querySnapshot = await getDocs(q);
-                let scoresHtml = "<h2>Meilleurs scores</h2><ol>";
-                querySnapshot.forEach((doc) => {
-                    const scoreData = doc.data();
-                    scoresHtml += `<li>${scoreData.username}: ${scoreData.score}</li>`;
-                });
-                scoresHtml += "</ol>";
-                document.getElementById("top-scores").innerHTML = scoresHtml;
-            } catch (error) {
-                console.error("Erreur lors de la récupération des scores: ", error);
-            }
-        }
-
-        hintButton.addEventListener('click', showHint);
-        replayButton.addEventListener('click', resetQuiz);
-
-        totalQuestionsDisplay.textContent = quizData.length;
+        });
     </script>
 </body>
 </html>
