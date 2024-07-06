@@ -1,0 +1,405 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="pragma" content="no-cache" />
+    <meta http-equiv="expires" content="-1" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <title>Cyber Campus - Connexion</title>
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #ff00ff;
+            --background-color: #0a0a2a;
+            --text-color: #ffffff;
+            --input-bg: rgba(255, 255, 255, 0.2);
+            --box-bg: rgba(255, 255, 255, 0.1);
+        }
+        :root.light-theme {
+            --primary-color: #008080;
+            --secondary-color: #800080;
+            --background-color: #f0f0f0;
+            --text-color: #333333;
+            --input-bg: rgba(0, 0, 0, 0.1);
+            --box-bg: rgba(255, 255, 255, 0.8);
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            transition: all 0.3s ease;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .login-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .login-box {
+            background: var(--box-bg);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--primary-color);
+            width: 300px;
+        }
+        input, button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            box-sizing: border-box;
+        }
+        input {
+            background: var(--input-bg);
+            color: var(--text-color);
+        }
+        button {
+            background: var(--primary-color);
+            color: var(--background-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: var(--secondary-color);
+        }
+        .footer {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            padding: 20px;
+            background: var(--box-bg);
+        }
+        .button-container {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 20px;
+            width: 100%;
+            max-width: 600px;
+        }
+        .footer button {
+            width: 200px;
+        }
+        .tarif-table, .access-points-table {
+            width: 100%;
+            max-width: 600px;
+            margin: 20px auto;
+            border-collapse: separate;
+            border-spacing: 0;
+            box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+            display: none;
+        }
+        .tarif-table th, .tarif-table td, .access-points-table th, .access-points-table td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+        }
+        .tarif-table th, .access-points-table th {
+            background-color: var(--box-bg);
+            color: var(--primary-color);
+            font-weight: bold;
+        }
+        .tarif-table tr:last-child td, .access-points-table tr:last-child td {
+            border-bottom: none;
+        }
+        .tarif-table tr:hover, .access-points-table tr:hover {
+            background-color: var(--input-bg);
+            cursor: pointer;
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
+            }
+            to {
+                text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+            }
+        }
+        .info {
+            color: var(--text-color);
+            text-align: center;
+            margin-bottom: 20px;
+        }
+        .alert {
+            color: #ff0000;
+            font-weight: bold;
+        }
+        .notification {
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: var(--box-bg);
+            border: 2px solid var(--primary-color);
+            border-radius: 10px;
+            padding: 20px;
+            text-align: center;
+            box-shadow: 0 0 20px var(--secondary-color);
+            z-index: 1000;
+            display: none;
+        }
+        .notification h2 {
+            color: var(--text-color);
+            margin-bottom: 10px;
+        }
+        .notification p {
+            margin-bottom: 20px;
+            color: var(--text-color);
+        }
+        .notification button {
+            background: var(--primary-color);
+            color: var(--background-color);
+            border: none;
+            padding: 10px 20px;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        .notification button:hover {
+            background: var(--secondary-color);
+            color: var(--background-color);
+        }
+        .close-icon {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            font-size: 20px;
+            cursor: pointer;
+            color: var(--text-color);
+        }
+        #theme-toggle {
+            position: fixed;
+            top: 10px;
+            right: 10px;
+            background: none;
+            border: none;
+            cursor: pointer;
+            font-size: 14px; /* Réduit encore plus la taille de la police */
+            z-index: 1001;
+            padding: 0; /* Supprime tout le padding */
+            border-radius: 50%;
+            box-shadow: 0 0 3px rgba(0, 0, 0, 0.1); /* Réduit encore l'ombre */
+            transition: background-color 0.3s ease;
+            width: 20px; /* Réduit la largeur */
+            height: 20px; /* Réduit la hauteur */
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* Assure que le contenu ne déborde pas */
+        }
+        #theme-toggle:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+        }
+        :root.light-theme #theme-toggle:hover {
+            background-color: rgba(0, 0, 0, 0.1);
+        }
+    </style>
+</head>
+<body>
+    $(if chap-id)
+    <form name="sendin" action="$(link-login-only)" method="post" style="display:none">
+        <input type="hidden" name="username" />
+        <input type="hidden" name="password" />
+        <input type="hidden" name="dst" value="$(link-orig)" />
+        <input type="hidden" name="popup" value="true" />
+    </form>
+
+    <script src="/md5.js"></script>
+    <script>
+
+        function redirectToChrome() {
+    if (navigator.userAgent.toLowerCase().indexOf('chrome') === -1) {
+        var chromeUrl = 'googlechrome://navigate?url=' + encodeURIComponent(window.location.href);
+        window.location.href = chromeUrl;
+        
+        // Si la redirection vers Chrome ne fonctionne pas après 1 seconde, ouvrez dans le navigateur par défaut
+        setTimeout(function() {
+            window.location.href = window.location.href;
+        }, 1000);
+    }
+}
+// Appeler la fonction de redirection au chargement de la page
+window.onload = redirectToChrome;
+
+        function doLogin() {
+            document.sendin.username.value = document.login.username.value;
+            document.sendin.password.value = hexMD5('$(chap-id)' + document.login.password.value + '$(chap-challenge)');
+            document.sendin.submit();
+            return false;
+        }
+    </script>
+    $(endif)
+    <button id="theme-toggle" aria-label="Toggle theme">🌙</button>
+    <div class="container">
+        <div class="header">
+            Cyber Campus
+        </div>
+        <div class="login-section">
+            <div class="login-box">
+                <p class="info $(if error)alert$(endif)">
+                    $(if error == "")Veuillez vous connecter pour utiliser le service internet $(if trial == 'yes')<br />Essai gratuit disponible, <a href="$(link-login-only)?dst=$(link-orig-esc)&amp;username=T-$(mac-esc)">cliquez ici</a>.$(endif)
+                    $(endif)
+
+                    $(if error)$(error)$(endif)
+                </p>
+                <form name="login" action="$(link-login-only)" method="post"
+                    $(if chap-id) onSubmit="return doLogin()" $(endif)>
+                    <input type="hidden" name="dst" value="$(link-orig)" />
+                    <input type="hidden" name="popup" value="true" />
+                    <input type="text" name="username" value="$(username)" placeholder="Nom d'utilisateur">
+                    <input type="password" name="password" placeholder="Mot de passe">
+                    <button type="submit">Se connecter</button>
+                </form>
+            </div>
+        </div>
+        <div class="footer">
+            <table class="tarif-table" id="tarifTable">
+                <thead>
+                    <tr>
+                        <th>Forfait</th>
+                        <th>Prix</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>1 Heure</td><td>100 F</td></tr>
+                    <tr><td>2 Heures</td><td>200 F</td></tr>
+                    <tr><td>3 Heures</td><td>250 F</td></tr>
+                    <tr><td>1 Heure Pro</td><td>250 F</td></tr>
+                    <tr><td>2 Heures Pro</td><td>450 F</td></tr>
+                    <tr><td>3 Heures Pro</td><td>600 F</td></tr>
+                    <tr><td>1 Go</td><td>100 F</td></tr>
+                    <tr><td>5 Go</td><td>400 F</td></tr>
+                    <tr><td>10 Go</td><td>700 F</td></tr>
+                    <tr><td>25 Go</td><td>1500 F</td></tr>
+                    <tr><td>1 Jour (illimité)</td><td>300 F</td></tr>
+                    <tr><td>3 Jours (illimité)</td><td>600 F</td></tr>
+                    <tr><td>7 Jours (illimité)</td><td>1200 F</td></tr>
+                    <tr><td>30 Jours (illimité)</td><td>4000 F</td></tr>
+                    <tr><td>1 Jour Pro (illimité)</td><td>600 F</td></tr>
+                    <tr><td>3 Jours Pro (illimité)</td><td>1200 F</td></tr>
+                    <tr><td>7 Jours Pro (illimité)</td><td>2400 F</td></tr>
+                    <tr><td>30 Jours Pro (illimité)</td><td>8000 F</td></tr>
+                </tbody>
+            </table>
+            <table class="access-points-table" id="accessPointsTable">
+                <thead>
+                    <tr>
+                        <th>Points d'accès</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr><td>Cyber Campus Arafat</td></tr>
+                    <tr><td>Cyber Campus Université</td></tr>
+                    <tr><td>Cyber Campus Rose croix</td></tr>
+                    <tr><td>Cyber Campus Banikanni, Fin potaux</td></tr>
+                    <tr><td>Cyber Campus Banikanni, Terrain ...</td></tr>
+                </tbody>
+            </table>
+            <div class="button-container">
+                <button onclick="toggleTable('tarifTable')">Payer un ticket</button>
+                <button onclick="toggleTable('accessPointsTable')">Points d'accès</button>
+            </div>
+        </div>
+    </div>
+
+    <div class="notification" id="notification">
+        <span class="close-icon" onclick="hideNotification()">&times;</span>
+        <h2>Payer vos tickets en ligne</h2>
+        <p>Télécharger l'App Cyber Campus et payer vos tickets sans forfait internet.</p>
+        <button onclick="proceedToDownload()">Continuer</button>
+    </div>
+
+    <script>
+        function toggleTable(tableId) {
+            var table = document.getElementById(tableId);
+            var otherTableId = tableId === 'tarifTable' ? 'accessPointsTable' : 'tarifTable';
+            var otherTable = document.getElementById(otherTableId);
+            
+            if (table.style.display === 'none' || table.style.display === '') {
+                table.style.display = 'table';
+                otherTable.style.display = 'none';
+            } else {
+                table.style.display = 'none';
+            }
+        }
+
+        function showNotification() {
+            document.getElementById('notification').style.display = 'block';
+        }
+
+        function hideNotification() {
+            document.getElementById('notification').style.display = 'none';
+        }
+
+        function proceedToDownload() {
+            window.location.href = 'https://www.mediafire.com/file/e13q0t5jciw6kh1/CyberCampus.apk/file';
+        }
+
+        // Gestionnaire d'événements pour le tableau des tarifs
+        document.querySelectorAll('.tarif-table tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                showNotification();
+            });
+        });
+
+        // Gestionnaire d'événements pour le tableau des points d'accès
+        document.querySelectorAll('.access-points-table tbody tr').forEach(row => {
+            row.addEventListener('click', function() {
+                var location = encodeURIComponent(this.cells[0].innerText + ", Cyber Campus");
+                window.open(`https://www.google.com/maps/dir/?api=1&destination=${location}`, '_blank');
+            });
+        });
+
+        const themeToggle = document.getElementById('theme-toggle');
+        const root = document.documentElement;
+        let isDarkTheme = window.matchMedia && window.matchMedia('(prefers-color-scheme: dark)').matches;
+
+        function setTheme(dark) {
+            if (dark) {
+                root.classList.remove('light-theme');
+                themeToggle.textContent = '🌙';
+                themeToggle.setAttribute('aria-label', 'Activer le mode clair');
+            } else {
+                root.classList.add('light-theme');
+                themeToggle.textContent = '☀️';
+                themeToggle.setAttribute('aria-label', 'Activer le mode sombre');
+            }
+            isDarkTheme = dark;
+        }
+
+        // Initialiser le thème en fonction de la préférence du système
+        setTheme(isDarkTheme);
+
+        themeToggle.addEventListener('click', () => {
+            setTheme(!isDarkTheme);
+        });
+
+        // Écouter les changements de préférence de thème du système
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+            setTheme(e.matches);
+        });
+    </script>
+</body>
+</html>

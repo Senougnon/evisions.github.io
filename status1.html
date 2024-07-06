@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title id="title">Cyber Campus - Statut</title>
+    $(if refresh-timeout)
+    <meta http-equiv="refresh" content="$(refresh-timeout-secs)">
+    $(endif)
+    <style>
+        :root {
+            --primary-color: #00ffff;
+            --secondary-color: #ff00ff;
+            --background-color: #0a0a2a;
+            --text-color: #ffffff;
+        }
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Arial', sans-serif;
+            background-color: var(--background-color);
+            color: var(--text-color);
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            height: 100%;
+        }
+        .header {
+            text-align: center;
+            padding: 20px;
+            font-size: 2.5em;
+            background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+        .status-section {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+        }
+        .status-box {
+            background: rgba(255, 255, 255, 0.1);
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 20px var(--primary-color);
+            width: 300px;
+        }
+        .welcome-message {
+            text-align: center;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+            color: var(--primary-color);
+        }
+        table {
+            width: 100%;
+            margin-bottom: 20px;
+            border-collapse: separate;
+            border-spacing: 0 10px;
+        }
+        td {
+            padding: 5px;
+        }
+        td:first-child {
+            text-align: right;
+            font-weight: bold;
+            color: var(--secondary-color);
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            margin: 10px 0;
+            border: none;
+            border-radius: 5px;
+            background: var(--primary-color);
+            color: var(--background-color);
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+        button:hover {
+            background: var(--secondary-color);
+        }
+        @keyframes glow {
+            from {
+                text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
+            }
+            to {
+                text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+            }
+        }
+        iframe {
+            display: none;
+        }
+    </style>
+    <script>
+    $(if advert-pending == 'yes')
+        var popup = '';
+        function focusAdvert() {
+            if (window.focus) popup.focus();
+        }
+        function openAdvert() {
+            popup = open('$(link-advert)', 'hotspot_advert', '');
+            setTimeout("focusAdvert()", 1000);
+        }
+    $(endif)
+        function openLogout() {
+            if (window.name != 'hotspot_status') return true;
+            open('$(link-logout)', 'hotspot_logout', 'toolbar=0,location=0,directories=0,status=0,menubars=0,resizable=1,width=280,height=250');
+            window.close();
+            return false;
+        }
+    </script>
+</head>
+<body $(if advert-pending == 'yes')onLoad="openAdvert()"$(endif)>
+    <div class="container">
+        <div class="header">
+            Cyber Campus
+        </div>
+        <div class="status-section">
+            <div class="status-box">
+                $(if login-by == 'trial')
+                    <div class="welcome-message">Bienvenue</div>
+                $(elif login-by != 'mac')
+                    <div class="welcome-message">Bienvenue</div>
+                    <div class="welcome-message" id="user">$(username)</div>
+                $(endif)
+                <div style="padding:10px;"><a class="a" id="cek" href="./detail.html"></a></div>
+                <form action="$(link-logout)" name="logout" onSubmit="return openLogout()">
+                    <table>
+                        <tr>
+                            <td>IP</td>
+                            <td>$(ip)</td>
+                        </tr>
+                        <tr>
+                            <td>UP | DW</td>
+                            <td>$(bytes-in-nice) | $(bytes-out-nice)</td>
+                        </tr>
+                        <tr>
+                            <td>Temps écoulé</td>
+                            <td>$(uptime)</td>
+                        </tr>
+                        $(if remain-bytes-total)
+                        <tr>
+                            <td>Data</td>
+                            <td>$(remain-bytes-total-nice)</td>
+                        </tr>
+                        $(endif)
+                        $(if session-time-left)
+                        <tr>
+                            <td>Temps de session</td>
+                            <td>$(session-time-left)</td>
+                        </tr>
+                        $(endif)
+                        $(if blocked == 'yes')
+                        <tr>
+                            <td>Statut</td>
+                            <td><div style="color: #FF8080"><a href="$(link-advert)" target="hotspot_advert">publicité</a> requise</div></td>
+                        </tr>
+                        $(elif refresh-timeout)
+                        <tr>
+                            <td>Rafraîchir</td>
+                            <td>$(refresh-timeout)</td>
+                        </tr>
+                        $(endif)
+                    </table>
+                    $(if login-by-mac != 'yes')
+                    <button type="submit">Déconnexion</button>
+                    $(endif)
+                </form>
+            </div>
+        </div>
+    </div>
+    <iframe id="exp" style="border:none;width:0;height:0;" src="about:blank"></iframe>
+    <script>
+        document.getElementById('title').innerHTML = window.location.hostname + " > statut";
+        // get validity
+        var usr = document.getElementById('user').innerHTML
+        var url = "https://example.com/status/status.php?name="; // http://ip-server-mikhmon/mikhmonv2/status/status.php?name=
+        var SessionName = "wifijoss"
+        var getvalid = url+usr+"&session="+SessionName
+        document.getElementById('exp').src = getvalid;
+    </script>
+</body>
+</html>

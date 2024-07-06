@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Authentification Automatique</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            text-align: center;
+            background-color: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.1);
+        }
+        #status {
+            margin-top: 20px;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Authentification Automatique</h1>
+        <p>Tentative de connexion en cours...</p>
+        <div id="status"></div>
+    </div>
+
+    <form id="loginForm" action="$(link-login-only)" method="post" style="display:none;">
+        <input type="hidden" name="username" value="Emmanuel">
+        <input type="hidden" name="password" value="115599">
+        <input type="hidden" name="dst" value="$(link-orig)">
+        <input type="hidden" name="popup" value="true">
+    </form>
+
+    <script>
+        window.onload = function() {
+            var statusElement = document.getElementById('status');
+            var loginForm = document.getElementById('loginForm');
+
+            statusElement.textContent = "Connexion en cours...";
+
+            // Simuler un délai pour l'authentification
+            setTimeout(function() {
+                loginForm.submit();
+                statusElement.textContent = "Authentification réussie. Redirection...";
+            }, 2000);
+        }
+    </script>
+</body>
+</html>

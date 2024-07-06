@@ -1,0 +1,290 @@
+:root {
+    --primary-color: #00ffff;
+    --secondary-color: #ff00ff;
+    --background-color: #0a0a2a;
+    --text-color: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.2);
+    --box-bg: rgba(255, 255, 255, 0.1);
+}
+
+:root.light-theme {
+    --primary-color: #008080;
+    --secondary-color: #800080;
+    --background-color: #f0f0f0;
+    --text-color: #333333;
+    --input-bg: rgba(0, 0, 0, 0.1);
+    --box-bg: rgba(255, 255, 255, 0.8);
+}
+
+body, html {
+    margin: 0;
+    padding: 0;
+    font-family: 'Arial', sans-serif;
+    background-color: var(--background-color);
+    color: var(--text-color);
+    height: 100vh;
+    display: flex;
+    flex-direction: column;
+    transition: all 0.3s ease;
+}
+
+.container {
+    display: flex;
+    flex-direction: column;
+    height: 100%;
+}
+
+.header {
+    text-align: center;
+    padding: 20px;
+    font-size: 2.5em;
+    background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: glow 2s ease-in-out infinite alternate;
+}
+
+.login-section {
+    flex: 1;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    padding: 20px;
+}
+
+.login-box {
+    background: var(--box-bg);
+    padding: 30px;
+    border-radius: 10px;
+    box-shadow: 0 0 20px var(--primary-color);
+    width: 300px;
+}
+
+input, button, select {
+    width: 100%;
+    padding: 10px;
+    margin: 10px 0;
+    border: none;
+    border-radius: 5px;
+    box-sizing: border-box;
+}
+
+input, select {
+    background: var(--input-bg);
+    color: var(--text-color);
+}
+
+button {
+    background: var(--primary-color);
+    color: var(--background-color);
+    font-weight: bold;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+button:hover {
+    background: var(--secondary-color);
+}
+
+.footer {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    background: var(--box-bg);
+}
+
+.button-container {
+    display: flex;
+    justify-content: center;
+    gap: 20px;
+    margin-top: 20px;
+    width: 100%;
+    max-width: 600px;
+}
+
+.footer button {
+    width: 200px;
+}
+
+.tarif-table, .access-points-table {
+    width: 100%;
+    max-width: 600px;
+    margin: 20px auto;
+    border-collapse: separate;
+    border-spacing: 0;
+    box-shadow: 0 0 20px rgba(0, 255, 255, 0.3);
+    display: none;
+}
+
+.tarif-table th, .tarif-table td, .access-points-table th, .access-points-table td {
+    padding: 15px;
+    text-align: left;
+    border-bottom: 1px solid rgba(0, 255, 255, 0.2);
+}
+
+.tarif-table th, .access-points-table th {
+    background-color: var(--box-bg);
+    color: var(--primary-color);
+    font-weight: bold;
+}
+
+.tarif-table tr:last-child td, .access-points-table tr:last-child td {
+    border-bottom: none;
+}
+
+.tarif-table tr:hover, .access-points-table tr:hover {
+    background-color: var(--input-bg);
+    cursor: pointer;
+}
+
+@keyframes glow {
+    from {
+        text-shadow: 0 0 5px var(--primary-color), 0 0 10px var(--primary-color);
+    }
+    to {
+        text-shadow: 0 0 10px var(--secondary-color), 0 0 20px var(--secondary-color);
+    }
+}
+
+.info {
+    color: var(--text-color);
+    text-align: center;
+    margin-bottom: 20px;
+}
+
+.alert {
+    color: #ff0000;
+    font-weight: bold;
+}
+
+.notification {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--box-bg);
+    border: 2px solid var(--primary-color);
+    border-radius: 10px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 0 20px var(--secondary-color);
+    z-index: 1000;
+    display: none;
+}
+
+.notification h2 {
+    color: var(--text-color);
+    margin-bottom: 10px;
+}
+
+.notification p {
+    margin-bottom: 20px;
+    color: var(--text-color);
+}
+
+.notification button {
+    background: var(--primary-color);
+    color: var(--background-color);
+    border: none;
+    padding: 10px 20px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+}
+
+.notification button:hover {
+    background: var(--secondary-color);
+    color: var(--background-color);
+}
+
+.close-icon {
+    position: absolute;
+    top: 10px;
+    right: 10px;
+    font-size: 20px;
+    cursor: pointer;
+    color: var(--text-color);
+}
+
+#theme-toggle, #ticket-icon {
+    position: fixed;
+    top: 10px;
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-size: 14px;
+    z-index: 1001;
+    padding: 0;
+    border-radius: 50%;
+    box-shadow: 0 0 3px rgba(0, 0, 0, 0.1);
+    transition: background-color 0.3s ease;
+    width: 20px;
+    height: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    overflow: hidden;
+}
+
+#theme-toggle {
+    right: 10px;
+}
+
+#ticket-icon {
+    right: 40px;
+}
+
+#theme-toggle:hover, #ticket-icon:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+}
+
+:root.light-theme #theme-toggle:hover, :root.light-theme #ticket-icon:hover {
+    background-color: rgba(0, 0, 0, 0.1);
+}
+
+#ticket-select {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--box-bg);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1002;
+}
+
+#ticket-select {
+    display: none;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--box-bg);
+    padding: 20px;
+    border-radius: 10px;
+    z-index: 1002;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.3);
+    width: 300px;
+}
+
+#ticket-select h2 {
+    text-align: center;
+    margin-bottom: 15px;
+    color: var(--text-color);
+}
+
+#ticket-select select {
+    width: 100%;
+    margin-bottom: 15px;
+}
+
+.ticket-buttons {
+    display: flex;
+    justify-content: space-between;
+}
+
+.ticket-buttons button {
+    width: 48%;
+}

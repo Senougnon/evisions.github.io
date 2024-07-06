@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Administration WiFi</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f0f0f0;
+        }
+        .container {
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .title {
+            background-color: #1a237e;
+            color: white;
+            padding: 10px;
+            text-align: center;
+            font-size: 18px;
+            margin-bottom: 20px;
+        }
+        .form-group {
+            margin-bottom: 15px;
+        }
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+        }
+        .form-group input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+        .form-group input[type="text"], 
+        .form-group input[type="password"], 
+        .form-group input[type="number"],
+        select {
+            background-color: #c8e6c9;
+        }
+        .form-group input[type="url"] {
+            background-color: #e0e0e0;
+        }
+        .submit-btn {
+            width: 100%;
+            padding: 10px;
+            background-color: #424242;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        .submit-btn:hover {
+            background-color: #616161;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="title">
+            <select id="nomTicket">
+                <option value="">Sélectionnez un ticket</option>
+                <option value="1 Heure">1 Heure</option>
+                <option value="2 Heures">2 Heures</option>
+                <option value="3 Heures">3 Heures</option>
+                <option value="1 Heure Pro">1 Heure Pro</option>
+                <option value="2 Heures Pro">2 Heures Pro</option>
+                <option value="3 Heures Pro">3 Heures Pro</option>
+                <option value="1 Go">1 Go</option>
+                <option value="5 Go">5 Go</option>
+                <option value="10 Go">10 Go</option>
+                <option value="25 Go">25 Go</option>
+                <option value="1 Jour (illimité)">1 Jour (illimité)</option>
+                <option value="3 Jours (illimité)">3 Jours (illimité)</option>
+                <option value="7 Jours (illimité)">7 Jours (illimité)</option>
+                <option value="30 Jours (illimité)">30 Jours (illimité)</option>
+                <option value="1 Jour Pro (illimité)">1 Jour Pro (illimité)</option>
+                <option value="3 Jours Pro (illimité)">3 Jours Pro (illimité)</option>
+                <option value="7 Jours Pro (illimité)">7 Jours Pro (illimité)</option>
+                <option value="30 Jours Pro (illimité)">30 Jours Pro (illimité)</option>
+            </select>
+        </div>
+        <form id="ticketForm">
+            <div class="form-group">
+                <label for="utilisateur">Utilisateur</label>
+                <input type="text" id="utilisateur" name="utilisateur" required>
+            </div>
+            <div class="form-group">
+                <label for="motDePasse">Mot de passe</label>
+                <input type="password" id="motDePasse" name="motDePasse" required>
+            </div>
+            <div class="form-group">
+                <label for="prix">Prix</label>
+                <input type="number" id="prix" name="prix" required readonly>
+            </div>
+            <div class="form-group">
+                <label for="lienPaiement">Lien de paiement</label>
+                <input type="url" id="lienPaiement" name="lienPaiement" required>
+            </div>
+            <button type="submit" class="submit-btn">Ajouter</button>
+        </form>
+    </div>
+
+    <script type="module">
+        // Import Firebase modules
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js";
+        import { getDatabase, ref, get, update } from "https://www.gstatic.com/firebasejs/10.12.2/firebase-database.js";
+
+        // Your web app's Firebase configuration
+        const firebaseConfig = {
+            apiKey: "AIzaSyB6AUBnK_7Vy2ABWI2JMo3ebG_Sljr8XlY",
+            authDomain: "cyber-campus-2706f.firebaseapp.com",
+            databaseURL: "https://cyber-campus-2706f-default-rtdb.firebaseio.com",
+            projectId: "cyber-campus-2706f",
+            storageBucket: "cyber-campus-2706f.appspot.com",
+            messagingSenderId: "719410601264",
+            appId: "1:719410601264:web:44fd2e3757721866303cf5",
+            measurementId: "G-CEEFJP5LYZ"
+        };
+
+        // Initialize Firebase
+        const app = initializeApp(firebaseConfig);
+        const db = getDatabase(app);
+
+        // Ticket prices mapping
+        const ticketPrices = {
+            "1 Heure": 100,
+            "2 Heures": 200,
+            "3 Heures": 250,
+            "1 Heure Pro": 250,
+            "2 Heures Pro": 450,
+            "3 Heures Pro": 600,
+            "1 Go": 100,
+            "5 Go": 400,
+            "10 Go": 700,
+            "25 Go": 1500,
+            "1 Jour (illimité)": 300,
+            "3 Jours (illimité)": 600,
+            "7 Jours (illimité)": 1200,
+            "30 Jours (illimité)": 4000,
+            "1 Jour Pro (illimité)": 600,
+            "3 Jours Pro (illimité)": 1200,
+            "7 Jours Pro (illimité)": 2400,
+            "30 Jours Pro (illimité)": 8000
+        };
+
+        // Auto-fill price when ticket is selected
+        document.getElementById('nomTicket').addEventListener('change', function() {
+            const selectedTicket = this.value;
+            const priceInput = document.getElementById('prix');
+            priceInput.value = ticketPrices[selectedTicket] || '';
+        });
+
+        document.getElementById('ticketForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            
+            const ticketName = document.getElementById('nomTicket').value;
+            const newData = {
+                utilisateur: document.getElementById('utilisateur').value,
+                motDePasse: document.getElementById('motDePasse').value,
+                prix: document.getElementById('prix').value,
+                lienPaiement: document.getElementById('lienPaiement').value
+            };
+
+            if (!ticketName) {
+                alert("Veuillez sélectionner un type de ticket.");
+                return;
+            }
+
+            try {
+                const ticketRef = ref(db, 'Tickets/' + ticketName);
+                const snapshot = await get(ticketRef);
+                let updates = {};
+
+                if (snapshot.exists()) {
+                    const currentData = snapshot.val();
+                    // Update lists
+                    ['utilisateur', 'motDePasse', 'prix'].forEach(field => {
+                        updates[field] = currentData[field] ? [...currentData[field], newData[field]] : [newData[field]];
+                    });
+                    // Update unique lien de paiement
+                    updates.lienPaiement = newData.lienPaiement;
+                } else {
+                    // Create new entry with initial lists
+                    updates = {
+                        utilisateur: [newData.utilisateur],
+                        motDePasse: [newData.motDePasse],
+                        prix: [newData.prix],
+                        lienPaiement: newData.lienPaiement
+                    };
+                }
+
+                await update(ticketRef, updates);
+                console.log("Ticket mis à jour: ", ticketName);
+                alert("Ticket mis à jour avec succès !");
+                document.getElementById('ticketForm').reset();
+                document.getElementById('nomTicket').value = '';
+            } catch (error) {
+                console.error("Erreur lors de la mise à jour du ticket: ", error);
+                alert("Erreur lors de la mise à jour du ticket. Veuillez réessayer.");
+            }
+        });
+    </script>
+</body>
+</html>
